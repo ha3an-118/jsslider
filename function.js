@@ -2,7 +2,31 @@ $(document).ready(function(){
 
   initSliders();
 
+  //add event listener
+  
+  //add action for next slide
+  $("[role=sliderNextPrev] [role=nextslide]").click(function(){
 
+      sliderId=$(this).parents("[role=slider]").attr("id");
+      sliderSlideNext(sliderId);
+
+  });
+  //add action for previous slide
+  $("[role=sliderNextPrev] [role=prevslide]").click(function(){
+
+      sliderId=$(this).parents("[role=slider]").attr("id");
+      sliderSlidePre(sliderId);
+
+  });
+  //add action for change slide to special slide
+  $("[role=sliderPaginations] li").click(function(){
+
+    sliderId = $(this).parents("[role=slider]").attr("id");
+
+    slideIndex = $(this).attr("sliderIndex");
+    sliderSlideSpecial(sliderId,slideIndex);
+
+  });
 
 
 
@@ -41,7 +65,7 @@ function initSliders(){
           $(sliders[i]).find("[role=sliderPaginations]").append("<ul></ul>");
 
           slides=$(sliders[i]).find("[role=sliderItemHolder]");
-          console.log(slides);
+
           for(slideCounter=0;slideCounter<slides.length;slideCounter++){
 
             //if want to add content can add it in the listElemnt
@@ -50,7 +74,7 @@ function initSliders(){
           }
 
           sliderPaginations= $(sliders[i]).find("[role=sliderPaginations] li");
-          console.log(sliderPaginations);
+
           $(sliderPaginations[0]).addClass("activeslide");
 
       }
@@ -123,6 +147,17 @@ function sliderSlidePre(sliderid){
   var showingSlide=$(sliderID).find("[role=sliderItemHolder]");
   $(showingSlide[showingSlideNum]).hide();
   $(showingSlide[preSlide]).show();
+  //if pagination is active than must change active class to it
+  if( $(sliderID).attr("pagination") ){
+        //get the pagination li remove the active class and add active calss
+        sliderPaginations = $(sliderID).find("[role=sliderPaginations] li");
+        $(sliderPaginations[showingSlideNum]).removeClass("activeslide");
+        $(sliderPaginations[preSlide]).addClass("activeslide");
+  }
+
+
+
+
   $(sliderID).attr("showingslidenum",preSlide);
 
 }
@@ -139,6 +174,14 @@ function sliderSlideSpecial(sliderid,slideNum){
 
   $(showingSlide[showingSlideNum]).hide();
   $(showingSlide[slideNum]).show();
+  //if pagination is active than must change active class to it
+  if( $(sliderID).attr("pagination") ){
+        //get the pagination li remove the active class and add active calss
+        sliderPaginations = $(sliderID).find("[role=sliderPaginations] li");
+        $(sliderPaginations[showingSlideNum]).removeClass("activeslide");
+        $(sliderPaginations[slideNum]).addClass("activeslide");
+  }
+
   $(sliderID).attr("showingslidenum",slideNum);
 
 
